@@ -1,0 +1,21 @@
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-arcade}
+      POSTGRES_USER: ${POSTGRES_USER:-arcade}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-arcade}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-arcade} -d ${POSTGRES_DB:-arcade}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
