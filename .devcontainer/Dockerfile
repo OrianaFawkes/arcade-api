@@ -1,4 +1,3 @@
-
 FROM mcr.microsoft.com/devcontainers/python:1-3.12-bookworm
 
 # Remove the broken, unused Yarn APT repository.
