@@ -1,0 +1,28 @@
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.orm import Session
+
+from app.core.database import get_db
+from app.schemas.player import PlayerCreateResponse, PlayerResponse, SessionResponse
+from app.services.player_service import create_anonymous_player
+
+
+router = APIRouter()
+
+
+@router.post(
+    "",
+    response_model=PlayerCreateResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_player(
+    db: Session = Depends(get_db),
+):
+    player, token, expires_at = create_anonymous_player(db)
+
+    return PlayerCreateResponse(
+        player=PlayerResponse.model_validate(player),
+        session=SessionResponse(
+            token=token,
+            expires_at=expires_at,
+        ),
+    )
