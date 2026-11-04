@@ -1,9 +1,10 @@
-from fastapi import FastAPI
-from fastapi import Depends
+from fastapi import Depends, FastAPI
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+from app.api.v1.router import router as v1_router
 from app.core.database import get_db
+
 
 app = FastAPI(
     title="Arcade API",
@@ -12,9 +13,13 @@ app = FastAPI(
 )
 
 
+app.include_router(v1_router)
+
+
 @app.get("/health")
 def health_check():
     return {"status": "ok"}
+
 
 @app.get("/health/database")
 def database_health_check(
