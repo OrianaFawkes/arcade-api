@@ -2,9 +2,13 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
+from app.models.player_session import PlayerSession
 from app.schemas.player import PlayerCreateResponse, PlayerResponse, SessionResponse
 from app.services.player_service import create_anonymous_player
 
+from typing import Annotated
+
+from app.api.dependencies import get_current_session
 
 router = APIRouter()
 
@@ -26,3 +30,15 @@ def create_player(
             expires_at=expires_at,
         ),
     )
+
+@router.get(
+    "/me",
+    response_model=PlayerResponse,
+)
+def get_me(
+    current_session: Annotated[
+        PlayerSession,
+        Depends(get_current_session),
+    ],
+):
+    return current_session.player
