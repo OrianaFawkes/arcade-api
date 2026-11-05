@@ -68,9 +68,39 @@ python -m pytest
 
 The virtual environment is local to your machine and should not be committed to Git.
 
+
 ## Running the API
 
-Start the development server:
+### 1. Configure the environment
+
+Copy the example environment file:
+
+```bash
+cp .env.example .env
+```
+
+The example values are for local development only. Do not use them in production.
+
+### 2. Start PostgreSQL
+
+Start the development and test databases:
+
+```bash
+docker compose up -d
+docker compose ps
+```
+
+Wait until both database services report healthy.
+
+### 3. Apply database migrations
+
+```bash
+alembic upgrade head
+```
+
+This prepares the development database with the current schema.
+
+### 4. Start the API
 
 ```bash
 python -m uvicorn main:app --reload
@@ -78,9 +108,10 @@ python -m uvicorn main:app --reload
 
 Open these URLs in your browser:
 
-* `/health` — basic application health check
-* `/docs` — interactive Swagger API documentation
-* `/openapi.json` — generated OpenAPI specification
+- `/health` — basic application health check
+- `/health/database` — database connectivity check
+- `/docs` — interactive Swagger API documentation
+- `/openapi.json` — generated OpenAPI specification
 
 In Codespaces, use the forwarded port URL shown in the **Ports** panel. Locally, the default address is `http://127.0.0.1:8000`.
 
