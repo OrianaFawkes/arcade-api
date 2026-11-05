@@ -1,14 +1,14 @@
 import hashlib
 import secrets
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from app.core.policies import PLAYER_SESSION_RETENTION
 from app.models import Player, PlayerSession
 
 
-SESSION_LIFETIME = timedelta(days=365)
 MAX_NAME_ATTEMPTS = 5
 
 DISPLAY_NAME_INDEX = "ix_players_display_name_lower"
@@ -91,7 +91,7 @@ def create_anonymous_player(
         token_hash = hash_session_token(token)
 
         expires_at = (
-            datetime.now(timezone.utc) + SESSION_LIFETIME
+            datetime.now(timezone.utc) + PLAYER_SESSION_RETENTION
         )
 
         session = PlayerSession(
