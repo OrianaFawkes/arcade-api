@@ -28,5 +28,11 @@ class Settings:
                 "outside the development environment."
             )
 
+        self.cors_origins = [
+            origin.strip()
+            for origin in os.getenv("CORS_ORIGINS", "").split(",")
+            if origin.strip()
+        ]
+
 
 settings = Settings()
