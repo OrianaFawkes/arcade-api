@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 class PowersOfTwoScoreSubmission(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    
+
     score: int = Field(ge=0)
     tile: int = Field(ge=2)
 

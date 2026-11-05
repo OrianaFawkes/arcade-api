@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 @pytest.fixture(scope="session")
 def test_engine():
     database_url = os.getenv("TEST_DATABASE_URL")

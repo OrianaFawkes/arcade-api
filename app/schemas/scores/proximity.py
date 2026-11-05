@@ -11,6 +11,6 @@ class ProximityDifficulty(str, Enum):
 
 class ProximityScoreSubmission(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    
+
     difficulty: ProximityDifficulty
     elapsed_seconds: int = Field(gt=0)

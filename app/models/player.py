@@ -37,4 +37,3 @@ class Player(Base):
     sessions = relationship("PlayerSession", back_populates="player")
 
     scores = relationship("Score", back_populates="player")
-    

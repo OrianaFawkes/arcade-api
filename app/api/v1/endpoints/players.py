@@ -31,6 +31,7 @@ def create_player(
         ),
     )
 
+
 @router.get(
     "/me",
     response_model=PlayerResponse,
