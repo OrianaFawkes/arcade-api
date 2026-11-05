@@ -7,6 +7,11 @@ from sqlalchemy.orm import Session
 
 from app.models import Base
 
+from fastapi.testclient import TestClient
+
+from main import app
+from app.core.database import get_db
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -65,3 +70,20 @@ def db_session(test_engine):
         session.close()
         transaction.rollback()
         connection.close()
+
+
+@pytest.fixture
+def client(db_session):
+    original_overrides = app.dependency_overrides.copy()
+
+    def override_get_db():
+        yield db_session
+
+    app.dependency_overrides[get_db] = override_get_db
+
+    try:
+        with TestClient(app) as test_client:
+            yield test_client
+    finally:
+        app.dependency_overrides.clear()
+        app.dependency_overrides.update(original_overrides)

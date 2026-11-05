@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.v1.endpoints import games, players, scores
+from app.api.v1.endpoints import games, leaderboards, players, scores
 
 
 router = APIRouter(prefix="/api/v1")
@@ -21,4 +21,10 @@ router.include_router(
     scores.router,
     prefix="/games",
     tags=["Scores"],
+)
+
+router.include_router(
+    leaderboards.router,
+    prefix="/games",
+    tags=["Leaderboards"],
 )
