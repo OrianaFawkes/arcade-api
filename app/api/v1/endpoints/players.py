@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Request, status
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
+from app.core.limiter import limiter
 from app.models.player_session import PlayerSession
 from app.schemas.player import PlayerCreateResponse, PlayerResponse, SessionResponse
 from app.services.player_service import create_anonymous_player
@@ -18,7 +19,9 @@ router = APIRouter()
     response_model=PlayerCreateResponse,
     status_code=status.HTTP_201_CREATED,
 )
+@limiter.limit("5/minute")
 def create_player(
+    request: Request,
     db: Session = Depends(get_db),
 ):
     player, token, expires_at = create_anonymous_player(db)
@@ -36,7 +39,9 @@ def create_player(
     "/me",
     response_model=PlayerResponse,
 )
+@limiter.limit("60/minute")
 def get_me(
+    request: Request,
     current_session: Annotated[
         PlayerSession,
         Depends(get_current_session),

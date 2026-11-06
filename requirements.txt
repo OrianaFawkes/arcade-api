@@ -3,3 +3,4 @@ sqlalchemy
 psycopg[binary]
 python-dotenv
 alembic
+slowapi>=0.1.9,<0.2

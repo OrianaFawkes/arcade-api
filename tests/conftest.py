@@ -11,11 +11,17 @@ from fastapi.testclient import TestClient
 
 from main import app
 from app.core.database import get_db
+from app.core.limiter import limiter
 
 from dotenv import load_dotenv
 
 load_dotenv()
 
+@pytest.fixture(autouse=True)
+def reset_rate_limits():
+    limiter.reset()
+    yield
+    limiter.reset()
 
 @pytest.fixture(scope="session")
 def test_engine():
